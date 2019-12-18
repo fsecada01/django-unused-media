@@ -28,10 +28,11 @@ def get_used_media():
 
         storage = field.storage
 
-        for value in field.model.objects \
-                .values_list(field.name, flat=True) \
-                .exclude(**is_empty).exclude(**is_null):
+        for value in field.model.objects.values_list(
+                field.name, flat=True).exclude(**is_empty).exclude(
+                **is_null):
             if value not in EMPTY_VALUES:
+                value = os.path.relpath(value, settings.MEDIA_ROOT)
                 media.add(storage.path(value))
 
     return media
